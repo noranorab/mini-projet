@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+
+  backend-service:
+    image: localhost:5000/backend:1.0.1
+    container_name: backend-service
+    ports:
+      - "8080:8080"
+    networks:
+      - mysql-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-service:3306/testdb?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    depends_on:
+      - mysql-service
+
+  mysql-service:
+    image: localhost:5000/mysql
+    container_name: mysql-service
+    restart: always
+    volumes:
+      - mysql-vol:/var/lib/mysql
+      - mysql-config:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3307:3306"
+    networks:
+      - mysql-network
+
+
+  frontend-service:
+    image: localhost:5000/frontend:1.0.0
+    container_name: frontend-service
+    ports:
+      - "8081:80"
+    networks:
+      - mysql-network
+    depends_on:
+      - backend-service
+
+networks:
+  mysql-network:
+    driver: bridge
+
+volumes:
+  mysql-vol:
+  mysql-config:

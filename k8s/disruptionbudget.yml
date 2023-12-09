@@ -1,0 +1,32 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: mysql-pdb
+  namespace: exam
+spec:
+  maxUnavailable: 1  # Nombre maximal d'instances indisponibles simultanément
+  selector:
+    matchLabels:
+      app: mysql-service
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: backend-pdb
+  namespace: exam
+spec:
+  minAvailable: 1  # Nombre minimales d'instances disponibles simultanément lors d'une perturbation
+  selector:
+    matchLabels:
+      app: backend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: frontend-pdb
+  namespace: exam
+spec:
+  minAvailable: 1  # Nombre maximal d'instances indisponibles simultanément
+  selector:
+    matchLabels:
+      app: frontend

@@ -1,0 +1,12 @@
+# Exclude IDE-specific files and directories
+.idea/
+*.iml
+*.iws
+
+# Exclude Docker-related files
+.dockerignore
+Dockerfile
+
+# Exclude version control files
+.git/
+.gitignore
